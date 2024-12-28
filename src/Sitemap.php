@@ -1,6 +1,6 @@
 <?php
 
-namespace Dionisiy\SitemapGoogle;
+namespace Premento\SitemapGoogle;
 
 use XMLWriter;
 use InvalidArgumentException;
