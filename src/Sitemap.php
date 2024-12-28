@@ -3,48 +3,30 @@
 namespace Dionisiy\SitemapGoogle;
 
 use XMLWriter;
+use InvalidArgumentException;
+use RuntimeException;
+use DateTimeImmutable;
 
 class Sitemap
 {
-    private $filePath;
+    private string $filePath;
+    private bool $useIndent = true;
+    private bool $useXhtml;
+    private XMLWriter $writer;
+    private string $location;
+    private string $title;
+    private string $name;
+    private DateTimeImmutable $date;
+    private array $keywords = [];
+    private string $genres;
+    private string $lang;
+    private array $images = [];
 
-    /**
-     * @var bool if XML should be indented
-     */
-    private $useIndent = true;
-
-    /**
-     * @var XMLWriter
-     */
-    private $writer;
-
-    private $location;
-
-    private $title;
-
-    private $name;
-
-    private $date;
-
-    private $keywords;
-
-    private $genres;
-
-    private $lang;
-
-    private $images;
-
-    /**
-     * @param string $filePath path of the file to write to
-     * @param bool   $useXhtml is XHTML namespace should be specified
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function __construct($filePath, $useXhtml = false)
+    public function __construct(string $filePath, bool $useXhtml = false)
     {
         $dir = dirname($filePath);
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Please specify valid file path. Directory not exists. You have specified: {$dir}."
             );
         }
@@ -53,55 +35,47 @@ class Sitemap
         $this->createNewFile();
     }
 
-    public function setKeywords(array $keywords)
+    public function setKeywords(array $keywords): void
     {
         $this->keywords = $keywords;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function setPublicationDate($date)
+    public function setPublicationDate(DateTimeImmutable $date): void
     {
         $this->date = $date;
     }
 
-    public function setGenres(string $genres)
+    public function setGenres(string $genres): void
     {
         $this->genres = $genres;
     }
 
-    public function setLanguage(string $lang)
+    public function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
 
-    public function setName(string $siteName)
+    public function setName(string $siteName): void
     {
         $this->name = $siteName;
     }
 
-    public function setLoc(string $location)
+    public function setLoc(string $location): void
     {
         $this->location = $location;
     }
 
-    /**
-     * @param array<string> $images Pass urls to the images
-     * @return void
-     */
-    public function setImages(array $images)
+    public function setImages(array $images): void
     {
         $this->images = $images;
     }
 
-    /**
-     * Creates new file
-     * @throws \RuntimeException if file is not writeable
-     */
-    private function createNewFile()
+    private function createNewFile(): void
     {
         $filePath = $this->filePath;
         if (file_exists($filePath)) {
@@ -109,7 +83,7 @@ class Sitemap
             if (is_writable($filePath)) {
                 unlink($filePath);
             } else {
-                throw new \RuntimeException("File \"$filePath\" is not writable.");
+                throw new RuntimeException("File \"$filePath\" is not writable.");
             }
         }
         $this->writer = new XMLWriter();
@@ -122,10 +96,7 @@ class Sitemap
         $this->writer->writeAttribute('xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1');
     }
 
-    /**
-     * Writes closing tags to current file
-     */
-    private function finishFile()
+    private function finishFile(): void
     {
         if ($this->writer !== null) {
             $this->writer->endElement();
@@ -134,45 +105,26 @@ class Sitemap
         }
     }
 
-    /**
-     * Finishes writing
-     */
-    public function write()
+    public function write(): void
     {
         $this->finishFile();
     }
 
-    /**
-     * Flushes buffer into file
-     * @param bool $finishFile Pass true to close the file to write to, used only when useGzip is true
-     */
-    private function flush($finishFile = false)
+    private function flush(bool $finishFile = false): void
     {
         file_put_contents($this->filePath, $this->writer->flush(true), FILE_APPEND);
     }
 
-    /**
-     * Takes a string and validates, if the string
-     * is a valid url
-     *
-     * @param string $location
-     * @throws \InvalidArgumentException
-     */
-    protected function validateLocation($location)
+    protected function validateLocation(string $location): void
     {
         if (false === filter_var($location, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "The location must be a valid URL. You have specified: {$location}."
             );
         }
     }
 
-    /**
-     * Adds a new item to the sitemap
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function addItem()
+    public function addItem(): void
     {
         $this->validateLocation($this->location);
 
@@ -186,7 +138,7 @@ class Sitemap
         if (!empty($this->genres)) {
             $this->writer->writeElement('news:genres', $this->genres);
         }
-        $this->writer->writeElement('news:publication_date', date('c', $this->date));
+        $this->writer->writeElement('news:publication_date', $this->date->format('c'));
         $this->writer->writeElement('news:title', $this->title);
         if (!empty($this->keywords)) {
             $this->writer->writeElement('news:keywords', implode(", ", $this->keywords));

@@ -1,19 +1,23 @@
 {
-    "name": "dionisiy13/google-news-sitemap",
+    "name": "premento/googlenewssitemap",
     "description": "Easy way to do sitemap for google news",
     "keywords": [
         "php",
         "google news",
         "sitemap"
     ],
-    "homepage": "https://github.com/dionisiy13/google-news-sitemap",
+    "homepage": "https://github.com/premento/googlenewssitemap",
     "license": "MIT",
     "authors": [
         {
             "name": ":Dan Kurasov",
             "email": "dionisiy13@gmail.com",
             "role": "PHP Developer"
-        }
+        },{
+            "name": ":Premento",
+            "email": "premento@outlook.com",
+            "role": "PHP Developer"
+        },
     ],
     "require": {
         "php" : ">=7.0.0"
@@ -23,12 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dionisiy\\SitemapGoogle\\": "src"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
+            "Premento\\SitemapGoogle\\": "src"
         }
     }
 }
