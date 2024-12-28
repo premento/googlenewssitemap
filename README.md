@@ -1,8 +1,8 @@
 # Google News Sitemap
 
-[![Packagist](https://img.shields.io/packagist/v/dionisiy13/google-news-sitemap.svg)](https://packagist.org/packages/dionisiy13/google-news-sitemap)
+[![Packagist](https://img.shields.io/packagist/v/premento/googlenewssitemap.svg)](https://packagist.org/packages/premento/googlenewssitemap)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Total Downloads](https://img.shields.io/packagist/dt/dionisiy13/google-news-sitemap.svg?style=flat-square)](https://packagist.org/packages/dionisiy13/google-news-sitemap)
+[![Total Downloads](https://img.shields.io/packagist/dt/premento/googlenewssitemap.svg?style=flat-square)](https://packagist.org/packages/premento/googlenewssitemap)
 
 Class for generating the sitemap for google news. More about google news sitemap [here](https://support.google.com/news/publisher/answer/74288?hl=uk)
 
@@ -39,13 +39,13 @@ Example of the sitemap from google
 Via Composer
 
 ``` bash
-$ composer require dionisiy13/google-news-sitemap
+$ composer require premento/googlenewssitemap
 ```
 
 ## Usage
 
 ``` php
-$sitemap = new \Dionisiy\SitemapGoogle\Sitemap($pathToFile);
+$sitemap = new \Premento\SitemapGoogle\Sitemap($pathToFile);
 $siteName = "example.com";
 foreach ($posts as $item) {
     $sitemap->setGenres("Blog");
